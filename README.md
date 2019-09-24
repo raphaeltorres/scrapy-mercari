@@ -15,4 +15,4 @@ Clone Repo
  > pip install -r requirements.txt
 
 Scrape Products
-> $ scrapy crawl products
+> scrapy crawl products
