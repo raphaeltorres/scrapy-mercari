@@ -13,7 +13,6 @@ BOT_NAME = 'mercari'
 
 SPIDER_MODULES = ['mercari.spiders']
 NEWSPIDER_MODULE = 'mercari.spiders'
-DUPEFILTER_CLASS = 'scrapy.dupefilters.BaseDupeFilter'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'mercari (+http://www.yourdomain.com)'

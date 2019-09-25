@@ -34,7 +34,7 @@ class ProductsSpider(scrapy.Spider):
             self.api_url,
             method="POST",
             body=json.dumps(self.request_body),
-            headers={'Content-Type': 'application/json; charset=UTF-8'}
+            headers={'Content-Type': 'application/json; charset=UTF-8'},
         )
 
     def parse(self, response):
@@ -52,8 +52,9 @@ class ProductsSpider(scrapy.Spider):
                 }
 
             self.offset = self.offset + 20
+            self.request_body['variables']['criteria']['offset'] = self.offset
             yield scrapy.Request(
-                self.api_url,
+                response.url,
                 method="POST",
                 body=json.dumps(self.request_body),
                 headers={'Content-Type': 'application/json; charset=UTF-8'},
