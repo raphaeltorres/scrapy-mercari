@@ -16,3 +16,5 @@ Clone Repo
 
 Scrape Products
 > scrapy crawl products
+> scrapy crawl products -o products.csv -t csv | CSV Format
+> scrapy crawl products -o product.json | JSON Format
