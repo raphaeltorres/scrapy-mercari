@@ -1,6 +1,8 @@
 import scrapy
 import json
 import csv
+import fnmatch
+import os
 from scrapy import Selector
 
 class SellerSpider(scrapy.Spider):
@@ -33,20 +35,23 @@ class SellerSpider(scrapy.Spider):
         "query": "query brandCategoryQuery($criteria: SearchInput!, $brandId: Int!, $categoryId: Int!) { search(criteria: $criteria) {\n    itemsList {\n      id\n      name\n      status\n      description\n      originalPrice\n      shippingPayer {\n        id\n        name\n        __typename\n      }\n      photos {\n        thumbnail\n        __typename\n      }\n      seller {\n        sellerId: id\n        photo\n        ratings {\n          sellerRatingCount: count\n          sellerRatingAverage: average\n          __typename\n        }\n        __typename\n      }\n      price\n      itemDecoration {\n        id\n        imageUrl\n        __typename\n      }\n      brand {\n        id\n        name\n        __typename\n      }\n      itemSize {\n        id\n        name\n        __typename\n      }\n      itemCondition {\n        id\n        name\n        __typename\n      }\n      itemCategory {\n        id\n        name\n        __typename\n      }\n      customFacetsList {\n        facetName\n        value\n        __typename\n      }\n      __typename\n    }\n    page {\n      offset\n      __typename\n    }\n    facetsList {\n      criteria {\n        categoryList {\n          id\n          name\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    count\n    __typename\n  }\n  master {\n    itemBrands(id: $brandId) {\n      name\n      __typename\n    }\n    __typename\n  }\n  categories(id: $categoryId) {\n    title\n    categoryLevels {\n      level\n      selected {\n        name\n        id\n        __typename\n      }\n      categoryList {\n        name\n        id\n        displayOrder\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  keywords(categoryId: $categoryId, brandId: $brandId) {\n    categoryId\n    brandId\n    displayName\n    pageUri\n    __typename\n  }\n  relatedShopItems(brandId: $brandId, categoryId: $categoryId) {\n    brandId\n    categoryId\n    pageUri\n    pageTitle\n    __typename\n  }\n}\n"}
 
     def start_requests(self):
-        with open('products.csv', mode='r') as csv_file:
-            csv_reader = csv.DictReader(csv_file)
-            line_count = 0
-            for row in csv_reader:
-                if line_count == 0:
-                    line_count += 1
-                seller_id = row['seller_url'][:-1].split('/')[-1]
-                if seller_id.isdigit():
-                    if seller_id not in self.mercari_sellers:
-                        self.mercari_sellers[seller_id] = {
-                            'seller_url': row['seller_url'],
-                            'seller_id': seller_id
-                        }
-                line_count += 1
+        for file in os.listdir('.'):
+            if fnmatch.fnmatch(file, '*.csv'):
+                if 'seller' not in file:
+                    with open(file, mode='r') as csv_file:
+                        csv_reader = csv.DictReader(csv_file)
+                        line_count = 0
+                        for row in csv_reader:
+                            if line_count == 0:
+                                line_count += 1
+                            seller_id = row['seller_url'][:-1].split('/')[-1]
+                            if seller_id.isdigit():
+                                if seller_id not in self.mercari_sellers:
+                                    self.mercari_sellers[seller_id] = {
+                                        'seller_url': row['seller_url'],
+                                        'seller_id': seller_id
+                                    }
+                            line_count += 1
         yield self.mercari_scapy_request()
 
 
