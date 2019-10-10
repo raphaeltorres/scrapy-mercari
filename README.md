@@ -20,3 +20,6 @@ Scrape Products
 > scrapy crawl products -o products.csv -t csv | CSV Format
 
 > scrapy crawl products -o product.json | JSON Format
+
+Scrape Seller reviews
+> scrapy crawl seller -o seller.csv -t csv
