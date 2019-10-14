@@ -21,5 +21,8 @@ Scrape Products
 
 > scrapy crawl products -o product.json | JSON Format
 
+Scrape Products using keywords
+> scrapy crawl search -a keyword="kyrie5" -o kyrie5.csv
+
 Scrape Seller reviews
 > scrapy crawl seller -o seller.csv -t csv
