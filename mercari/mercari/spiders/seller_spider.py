@@ -38,7 +38,7 @@ class SellerSpider(scrapy.Spider):
         for file in os.listdir('.'):
             if fnmatch.fnmatch(file, '*.csv'):
                 if 'seller' not in file:
-                    with open(file, mode='r') as csv_file:
+                    with open(file, mode='r', encoding="utf-8") as csv_file:
                         csv_reader = csv.DictReader(csv_file)
                         line_count = 0
                         for row in csv_reader:
